@@ -3,7 +3,10 @@ const FOO_FIGHTERS_MBID = "67f66c07-6e61-4026-ade5-7e782fad3a5d";
 const API_KEY = "";
 
 const fetchSetListData = async ({ mbid, page }) => {
-  const resp = await fetch(`${BASE_URL}/1.0/artist/${mbid}/setlists`, {
+  const url = new URL(`${BASE_URL}/1.0/artist/${mbid}/setlists`);
+  url.searchParams.append("p", page);
+
+  const resp = await fetch(url.toString(), {
     method: "GET",
     headers: {
       Accept: "application/json",
