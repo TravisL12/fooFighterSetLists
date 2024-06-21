@@ -2,7 +2,7 @@ const fs = require("fs").promises;
 
 const filters = {
   endDate: Date.now(),
-  startDate: new Date("1-1-2024").getTime(),
+  startDate: new Date("1-1-2020").getTime(),
   skipCovers: true,
 };
 
@@ -73,9 +73,7 @@ const sortCount = (songs) => {
 };
 
 const start = async () => {
-  const parsed = await getSetlists(
-    "./completeSetLists_current_june_22_2024.json"
-  );
+  const parsed = await getSetlists("./myData.json");
   const songs = countSongs(parsed);
   const filtered = filterSongs(songs);
   const tally = tallySongs(filtered);

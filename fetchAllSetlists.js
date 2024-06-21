@@ -2,7 +2,7 @@ const fs = require("fs");
 
 const BASE_URL = "https://api.setlist.fm/rest";
 const FOO_FIGHTERS_MBID = "67f66c07-6e61-4026-ade5-7e782fad3a5d";
-const API_KEY = "";
+const API_KEY = "d1p-LL91mqaJeLghELV9T6SslladbIa-CkJh";
 
 function saveJsonToFile(data, filePath) {
   const jsonString = JSON.stringify(data, null, 2);
@@ -56,6 +56,10 @@ const fetchSetListData = async ({ mbid, page }) => {
     },
   });
   const data = await resp.json();
+  if (data.code === 404) {
+    console.log("NOT FOUND");
+    return;
+  }
   appendJsonToFile(data.setlist, "./myData.json");
   return data;
 };
@@ -63,7 +67,8 @@ const fetchSetListData = async ({ mbid, page }) => {
 const start = async (pageCount) => {
   for (let i = 1; i <= pageCount; i++) {
     console.log(`fetching: Page ${i}`);
-    await fetchSetListData({ mbid: FOO_FIGHTERS_MBID, page: i });
+    const data = await fetchSetListData({ mbid: FOO_FIGHTERS_MBID, page: i });
+    if (!data) break;
   }
 };
 
