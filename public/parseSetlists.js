@@ -1,5 +1,11 @@
 const fs = require("fs").promises;
 
+const filters = {
+  endDate: Date.now(),
+  startDate: new Date("1-1-2024").getTime(),
+  skipCovers: true,
+};
+
 const tallySongs = (set) => {
   return set.reduce((acc, s) => {
     s.songs.forEach((song) => {
@@ -12,10 +18,6 @@ const tallySongs = (set) => {
   }, {});
 };
 
-const filters = {
-  endDate: Date.now(),
-  startDate: new Date("1-1-2023").getTime(),
-};
 const filterSongs = (songs) => {
   const filtered = songs.filter((set) => {
     return set.date >= filters.startDate && set.date <= filters.endDate;
@@ -38,6 +40,9 @@ const countSongs = (data) => {
     const songs = set
       .map((s) => s.song)
       .flat()
+      .filter(
+        (song) => !filters.skipCovers || (!song.cover && filters.skipCovers)
+      )
       .map(({ name }) => name);
     const showDate = getShowDate(show.eventDate);
 
@@ -62,12 +67,17 @@ const getSetlists = async (filePath) => {
   }
 };
 
+const sortCount = (songs) => {
+  const sorted = Object.entries(songs).sort((a, b) => (a[1] < b[1] ? 1 : -1));
+  console.log(sorted);
+};
+
 const start = async () => {
   const parsed = await getSetlists("./myData.json");
   const songs = countSongs(parsed);
   const filtered = filterSongs(songs);
   const tally = tallySongs(filtered);
-  console.log(tally);
+  sortCount(tally);
 };
 
 start();
