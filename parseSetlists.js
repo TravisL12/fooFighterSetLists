@@ -73,7 +73,9 @@ const sortCount = (songs) => {
 };
 
 const start = async () => {
-  const parsed = await getSetlists("./myData.json");
+  const parsed = await getSetlists(
+    "./completeSetLists_current_june_22_2024.json"
+  );
   const songs = countSongs(parsed);
   const filtered = filterSongs(songs);
   const tally = tallySongs(filtered);
